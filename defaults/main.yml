@@ -1,4 +1,9 @@
 ---
 # defaults file for python
 
-python_version: 3.4.3
+python3_version: 3.4.3
+python3_enabled: true
+python2_version: 2.7.10
+python2_enabled: false
+python_defaults:
+  - 3.4.3

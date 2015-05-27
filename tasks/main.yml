@@ -56,29 +56,31 @@
     mode=0644
   tags: python
 
-- name: Install Python
-  shell: pyenv install {{ python_version }}
+- name: Install Python 3
+  shell: pyenv install {{ python3_version }}
   environment:
     PATH: "{{ pyenv_install_dir }}/bin:{{ ansible_env.PATH }}"
     PYENV_ROOT: "{{ pyenv_install_dir }}"
   args:
-    creates: "{{ pyenv_install_dir }}/versions/{{ python_version }}/bin/python"
+    creates: "{{ pyenv_install_dir }}/versions/{{ python3_version }}/bin/python"
+  when: python3_enabled
   tags: python
 
-- name: Get current default Python
-  shell: pyenv global
+- name: Install Python 2
+  shell: pyenv install {{ python2_version }}
   environment:
     PATH: "{{ pyenv_install_dir }}/bin:{{ ansible_env.PATH }}"
     PYENV_ROOT: "{{ pyenv_install_dir }}"
-  register: default_python
-  ignore_errors: true
-  changed_when: false
+  args:
+    creates: "{{ pyenv_install_dir }}/versions/{{ python2_version }}/bin/python"
+  when: python2_enabled
   tags: python
 
 - name: Set default Python
-  shell: pyenv global {{ python_version }}
-  environment:
-    PATH: "{{ pyenv_install_dir }}/bin:{{ ansible_env.PATH }}"
-    PYENV_ROOT: "{{ pyenv_install_dir }}"
-  when: default_python.stdout != "{{ python_version }}"
+  template: >
+    src=version.j2
+    dest="{{ pyenv_install_dir }}/version"
+    owner=root
+    group=root
+    mode=0644
   tags: python
