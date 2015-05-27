@@ -1,2 +1,9 @@
 ---
 # handlers file for python
+
+- name: pyenv rehash
+  shell: pyenv rehash
+  environment:
+    PATH: "{{ pyenv_install_dir }}/bin:{{ ansible_env.PATH }}"
+    PYENV_ROOT: "{{ pyenv_install_dir }}"
+  tags: python

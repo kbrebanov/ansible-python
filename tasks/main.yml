@@ -1,2 +1,84 @@
 ---
 # tasks file for python
+
+- name: Include distribution specific variables
+  include_vars: "{{ ansible_distribution }}.yml"
+  tags: python
+
+- include: CentOS.yml
+  when: ansible_distribution == "CentOS"
+  tags: python
+
+- include: Ubuntu.yml
+  when: ansible_distribution == "Ubuntu"
+  tags: python
+
+- name: Create pyenv download directory
+  file: >
+    path={{ pyenv_install_dir }}
+    owner=root
+    group=root
+    mode=0755
+    state=directory
+  tags: python
+
+- name: Download pyenv
+  git: >
+    repo={{ pyenv_repo }}
+    dest={{ pyenv_install_dir }}
+    version=v{{ pyenv_version }}
+  tags: python
+
+- name: Create pyenv shims directory
+  file: >
+    path={{ pyenv_install_dir }}/shims
+    owner=root
+    group=root
+    mode=0755
+    state=directory
+  tags: python
+
+- name: Create pyenv versions directory
+  file: >
+    path={{ pyenv_install_dir }}/versions
+    owner=root
+    group=root
+    mode=0755
+    state=directory
+  tags: python
+
+- name: Add pyenv to global shell profile
+  template: >
+    src=pyenv.sh.j2
+    dest=/etc/profile.d/pyenv.sh
+    owner=root
+    group=root
+    mode=0644
+  tags: python
+
+- name: Install Python
+  shell: pyenv install {{ python_version }}
+  environment:
+    PATH: "{{ pyenv_install_dir }}/bin:{{ ansible_env.PATH }}"
+    PYENV_ROOT: "{{ pyenv_install_dir }}"
+  args:
+    creates: "{{ pyenv_install_dir }}/versions/{{ python_version }}/bin/python"
+  tags: python
+
+- name: Get current default Python
+  shell: pyenv global
+  environment:
+    PATH: "{{ pyenv_install_dir }}/bin:{{ ansible_env.PATH }}"
+    PYENV_ROOT: "{{ pyenv_install_dir }}"
+  register: default_python
+  ignore_errors: true
+  changed_when: false
+  tags: python
+
+- name: Set default Python
+  shell: pyenv global {{ python_version }}
+  environment:
+    PATH: "{{ pyenv_install_dir }}/bin:{{ ansible_env.PATH }}"
+    PYENV_ROOT: "{{ pyenv_install_dir }}"
+  when: default_python.stdout != "{{ python_version }}"
+  tags: python
