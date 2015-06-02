@@ -2,5 +2,5 @@
 # vars file for python
 
 pyenv_repo: https://github.com/yyuu/pyenv.git
-pyenv_version: 20150524
+pyenv_version: 20150601
 pyenv_install_dir: /usr/local/pyenv
