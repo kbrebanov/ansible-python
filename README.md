@@ -1,7 +1,7 @@
 python
 ======
 
-[![Ansible Galaxy](https://img.shields.io/badge/galaxy-kbrebanov.python-660198.svg)](https://galaxy.ansible.com/list#/roles/3943)
+[![Ansible Role](https://img.shields.io/ansible/role/3943.svg)](https://galaxy.ansible.com/list#/roles/3943)
 
 Installs Python
 
