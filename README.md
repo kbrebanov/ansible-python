@@ -15,7 +15,7 @@ Role Variables
 
 | Name            | Default                   | Description                    |
 |-----------------|---------------------------|--------------------------------|
-| python3_version | 3.4.3                     | Version of Python3 to install  |
+| python3_version | 3.5.0                     | Version of Python3 to install  |
 | python3_enabled | true                      | If Python3 should be installed |
 | python2_version | 2.7.10                    | Version of Python2 to install  |
 | python2_enabled | false                     | If Python2 should be installed |
